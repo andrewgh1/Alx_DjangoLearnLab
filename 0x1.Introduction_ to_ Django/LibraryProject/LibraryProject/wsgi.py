@@ -1,4 +1,5 @@
 """
+Entry-point for WSGI-compatible web servers to serve your project.
 WSGI config for LibraryProject project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
