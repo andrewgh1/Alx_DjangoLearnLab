@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import DetailView #cbv
+from django.views.generic.detail import DetailView #cbv
 from .models import Book #fbv
 from .models import Library #cbv
 from django.contrib.auth.views import LoginView ,LogoutView #setup user login and logout authentication views
