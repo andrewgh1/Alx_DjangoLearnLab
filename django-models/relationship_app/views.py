@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import DetailView #cbv
-from .models import Book, Library #fbv,cbv
+from .models import Book #fbv
+from .models import Library #cbv
 from django.contrib.auth.views import LoginView ,LogoutView #setup user login and logout authentication views
 from django.contrib.auth.forms import UserCreationForm #setup user login and logout authentication views
 from django.urls import reverse_lazy #setup user login and logout authentication views
