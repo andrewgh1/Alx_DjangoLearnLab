@@ -1,0 +1,15 @@
+python3 manage.py shell
+
+from relationship_app.models import Author, Book, Library
+
+# Create authors
+author1 = Author.objects.create(name="J.K. Rowling")
+author2 = Author.objects.create(name="George Orwell")
+
+# Create books
+book1 = Book.objects.create(title="Harry Potter", author=author1)
+book2 = Book.objects.create(title="1984", author=author2)
+
+# Create library
+library = Library.objects.create(name="Central Library")
+library.books.add(book1, book2)
