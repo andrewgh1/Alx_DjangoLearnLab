@@ -44,7 +44,7 @@ def login_view(request):
         form.add_error(None, 'Invalid username or password')
   else:
     form = AuthenticationForm()
-  return render(request, 'login.html', {'form': form})
+  return render(request, 'relationship_app/login.html', {'form': form})
 
 #logout_view: Logs out the user using logout function and redirects to the login page.
 def logout_view(request):
@@ -62,14 +62,14 @@ def register_view(request):
       return redirect('login')  # Redirect to login page after registration
   else:
     form = UserCreationForm()
-  return render(request, 'register.html', {'form': form})
+  return render(request, 'relationship_app/register.html', {'form': form})
 
 #home_view: Renders the home page.
 def home_view(request):
-    return render(request, 'home.html')
+    return render(request, 'relationship_app/home.html')
 
 
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test,login_required
 from django.core.exceptions import ObjectDoesNotExist
 from .models import UserProfile
 
@@ -99,15 +99,16 @@ def is_librarian(user):
 # and placed them in your templates directory.
 @user_passes_test(is_admin)
 def admin_view(request):
-   return render(request, 'admin_view.html')
+   return render(request, 'relationship_app/admin_view.html')
 
 @user_passes_test(is_member)
 def member_view(request):
-   return render(request, 'member_view.html')
+   return render(request, 'relationship_app/member_view.html')
 
+@login_required
 @user_passes_test(is_librarian)
 def librarian_view(request):
-   return render(request, 'librarian_view.html')
+   return render(request, 'relationship_app/librarian_view.html')
 
 
 # relationship_app/views.py
@@ -125,7 +126,7 @@ def add_book(request):
         form = BookForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('book_list')
+            return redirect('relationship_app.book_list')
     else:
         form = BookForm()
     return render(request, 'relationship_app/add_book.html', {'form': form})
@@ -137,7 +138,7 @@ def edit_book(request, book_id):
         form = BookForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
-            return redirect('book_list')
+            return redirect('relationship/book_list')
     else:
         form = BookForm(instance=book)
     return render(request, 'relationship_app/edit_book.html', {'form': form, 'book': book})
