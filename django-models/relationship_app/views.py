@@ -2,7 +2,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.views.generic.detail import DetailView #cbv
 from .models import Book #fbv
-from .models import Library #cbv
+from .models import Library 
+from django.contrib.auth import login, logout,authenticate
+from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
+from django.contrib.auth.views import LoginView, LogoutView
+#cbv
 
 
 # Create your views here.
@@ -20,8 +24,7 @@ class LibraryDetailView(DetailView):
     template_name = 'library_detail.html'
     context_object_name = 'library'
 
-from django.contrib.auth import login, logout,authenticate
-from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
+
 #setup user login and logout authentication views
 #login_view: Handles user login using AuthenticationForm. 
 # It checks credentials, authenticates the user, 
@@ -54,7 +57,8 @@ def register_view(request):
   if request.method == 'POST':
     form = UserCreationForm(request.POST)
     if form.is_valid():
-      form.save()
+      user = form.save()
+      login(request, user)
       return redirect('login')  # Redirect to login page after registration
   else:
     form = UserCreationForm()
@@ -67,6 +71,7 @@ def home_view(request):
 
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from .models import UserProfile
 
 #Defining user access control (Rbac)
 #This code defines a function that checks if the user is an admin or a member
@@ -107,7 +112,7 @@ def librarian_view(request):
 
 # relationship_app/views.py
 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import  get_object_or_404
 from django.contrib.auth.decorators import permission_required
 from .models import Book
 from .forms import BookForm

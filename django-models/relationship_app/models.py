@@ -43,6 +43,10 @@ class Librarian(models.Model):
 #This code creates the UserProfile model with a one-to-one relationship to the User model 
 # and includes a role field. The signals ensure that a UserProfile is automatically created
 #  when a new user is registered.
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
 class UserProfile(models.Model):
     ROLE_CHOICES = (
         ('Admin', 'Admin'),
@@ -51,7 +55,7 @@ class UserProfile(models.Model):
         )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default = 'Admin')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     def __str__(self):
         return f"{self.user.username} ({self.role})"
