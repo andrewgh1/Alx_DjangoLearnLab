@@ -26,6 +26,66 @@ SECRET_KEY = 'django-insecure-ie5vsgld+3%4(yn1_vf6zpb%&373ld5-mb@0y@$jsffzthv_k_
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# This setting enables the X-XSS-Protection header, 
+# which helps prevent Cross-Site Scripting (XSS) attacks by instructing the
+# browser to stop rendering the page if an XSS attack is detected.
+SECURE_BROWSER_XSS_FILTER = True
+# This setting controls the X-Frame-Options header, which determines 
+# whether your site can be embedded in an iframe. 
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+# Ensure that the CSRF cookie is only sent over HTTPS
+CSRF_COOKIE_SECURE = True
+
+# Ensure that the session cookie is only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+# Content Security Policy (CSP) Settings
+# The CSP header helps prevent Cross-Site Scripting (XSS) and data injection attacks.
+# This policy restricts the sources from which content (scripts, styles, images, etc.) can be loaded.
+CSP_DEFAULT_SRC = ("'self'",)  # Allow content only from your own domain
+CSP_SCRIPT_SRC = ("'self'",)   # Allow scripts only from your own domain
+CSP_STYLE_SRC = ("'self'",)    # Allow styles only from your own domain
+CSP_IMG_SRC = ("'self'",)      # Allow images only from your own domain
+CSP_FONT_SRC = ("'self'",)     # Allow fonts only from your own domain
+# Configure Django to recognize that the connection is secure when coming through a proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Redirect all non-HTTPS requests to HTTPS.
+# This setting ensures that users are always using a secure connection.
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS) settings
+# HSTS instructs browsers to only access the site via HTTPS for a specified time.
+# Setting this to 31536000 seconds (1 year) ensures that browsers will remember to use HTTPS for this duration.
+SECURE_HSTS_SECONDS = 31536000
+
+# Include all subdomains in the HSTS policy
+# This setting ensures that the HSTS policy applies to all subdomains of your site.
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# Enable HSTS preloading
+# This setting allows your domain to be included in the HSTS preload list maintained by browsers.
+# Enabling this helps ensure that browsers always use HTTPS from the first visit.
+SECURE_HSTS_PRELOAD = True
+
+# Ensure session cookies are only transmitted over HTTPS.
+# This prevents session cookies from being sent over insecure HTTP connections,
+# which helps protect session data from being intercepted.
+SESSION_COOKIE_SECURE = True
+
+# Ensure CSRF cookies are only transmitted over HTTPS.
+# This prevents CSRF tokens from being sent over insecure HTTP connections,
+# which helps protect against Cross-Site Request Forgery attacks.
+CSRF_COOKIE_SECURE = True
+
+
+
+
+
+
+
+
+
 
 ALLOWED_HOSTS = []
 
@@ -114,20 +174,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# Advanced Features and Security
-
-AUTH_USER_MODEL = 'bookshelf.CustomUser'
-
-SECURE_BROWSER_XSS_FILTER = True
-
-X_FRAME_OPTIONS = 'DENY'
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Ensure all sessions and CSRF cookies are sent over HTTPS to prevent interception
-CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_SECURE = True
 
 
 
@@ -152,6 +198,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 
 
