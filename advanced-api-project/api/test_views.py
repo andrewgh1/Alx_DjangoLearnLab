@@ -27,12 +27,13 @@ class BookAPITestCase(APITestCase):
 
     def test_create_book(self):
         """Test creating a new book"""
-        self.client.force_authenticate(user=self.user1)
+        self.client.login(username='testuser1', password='testpass123')
         url = reverse('book-create')
         data = {'title': 'New Test Book', 'publication_year': 2022, 'author': self.author1.id}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Book.objects.count(), 3)
+        self.client.logout()
 
     def test_retrieve_book(self):
         """Test retrieving a specific book"""
@@ -43,20 +44,22 @@ class BookAPITestCase(APITestCase):
 
     def test_update_book(self):
         """Test updating a book"""
-        self.client.force_authenticate(user=self.user1)
+        self.client.login(username='testuser1', password='testpass123')
         url = reverse('book-detail', args=[self.book1.id])
         data = {'title': 'Updated Test Book 1', 'publication_year': 2020, 'author': self.author1.id}
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Book.objects.get(id=self.book1.id).title, 'Updated Test Book 1')
+        self.client.logout()
 
     def test_delete_book(self):
         """Test deleting a book"""
-        self.client.force_authenticate(user=self.user1)
+        self.client.login(username='testuser1', password='testpass123')
         url = reverse('book-detail', args=[self.book1.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Book.objects.count(), 1)
+        self.client.logout()
 
     def test_filter_books(self):
         """Test filtering books by publication year"""
@@ -90,8 +93,9 @@ class BookAPITestCase(APITestCase):
 
     def test_unauthorized_update(self):
         """Test updating a book without proper permissions"""
-        self.client.force_authenticate(user=self.user2)  # Authenticate as a different user
+        self.client.login(username='testuser2', password='testpass123')  # Login as a different user
         url = reverse('book-detail', args=[self.book1.id])
         data = {'title': 'Unauthorized Update', 'publication_year': 2020, 'author': self.author1.id}
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.client.logout()
