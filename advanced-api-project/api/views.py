@@ -40,5 +40,21 @@ class BookCreateView(generics.CreateAPIView):
         """
         # Add any custom logic here before saving
         serializer.save(author=self.request.user)
+    
+class BookDeleteView(generics.DestroyAPIView):
+    """
+    API view to delete a book.
+    """
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
+
+class BookUpdateView(generics.UpdateAPIView):
+    """
+    API view to update a book.
+    """
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
 
 
