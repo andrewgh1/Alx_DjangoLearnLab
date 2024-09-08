@@ -1,0 +1,21 @@
+# List all books
+curl http://localhost:8000/api/books/
+
+# Get a specific book (replace 1 with an actual book ID)
+curl http://localhost:8000/api/books/1/
+
+# Create a new book (requires authentication)
+curl -X POST http://localhost:8000/api/books/create/ \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Token YOUR_AUTH_TOKEN" \
+     -d '{"title":"New Book", "publication_year":2023}'
+
+# Update a book (requires authentication and ownership)
+curl -X PUT http://localhost:8000/api/books/1/ \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Token YOUR_AUTH_TOKEN" \
+     -d '{"title":"Updated Book Title", "publication_year":2023}'
+
+# Delete a book (requires authentication and ownership)
+curl -X DELETE http://localhost:8000/api/books/1/ \
+     -H "Authorization: Token YOUR_AUTH_TOKEN"
