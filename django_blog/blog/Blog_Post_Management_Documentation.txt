@@ -1,0 +1,57 @@
+# Blog Post Management Features
+
+This document outlines the blog post management features implemented in the Django Blog project.
+
+## Features
+
+1. View all blog posts
+2. View individual blog post details
+3. Create new blog posts (authenticated users only)
+4. Edit existing blog posts (post authors only)
+5. Delete blog posts (post authors only)
+
+## How It Works
+
+### Viewing Blog Posts
+
+- All users can view the list of blog posts at the root URL `/`
+- Clicking on a post title takes you to the post detail page
+
+### Creating a Blog Post
+
+- Authenticated users can create new posts by clicking the "Create New Post" button on the post list page
+- The create post form is accessible at `/post/new/`
+
+### Editing a Blog Post
+
+- Post authors can edit their posts by clicking the "Edit" button on the post detail page
+- The edit form is accessible at `/post/<post_id>/edit/`
+
+### Deleting a Blog Post
+
+- Post authors can delete their posts by clicking the "Delete" button on the post detail page
+- A confirmation page is shown before the post is deleted
+
+## Permissions
+
+- Viewing posts: All users
+- Creating posts: Authenticated users only
+- Editing posts: Post authors only
+- Deleting posts: Post authors only
+
+## Testing the Blog Post Features
+
+1. Start the Django development server: `python manage.py runserver`
+2. Open a web browser and navigate to `http://localhost:8000/`
+3. Log in with an existing account or register a new one
+4. Try creating a new blog post
+5. View the post details
+6. Edit the post you just created
+7. Try deleting the post
+8. Log out and verify that you can still view posts but can't create, edit, or delete them
+
+## Security Measures
+
+- CSRF protection is enabled for all forms
+- `LoginRequiredMixin` ensures only authenticated users can access create, update, and delete views
+- `UserPassesTestMixin` ensures only post authors can edit or delete their own posts

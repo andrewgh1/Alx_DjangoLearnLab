@@ -1,0 +1,56 @@
+# Comment System Documentation
+
+This document outlines the comment functionality implemented in the Django Blog project.
+
+## Features
+
+1. View comments on blog posts
+2. Add new comments to blog posts (authenticated users only)
+3. Edit existing comments (comment authors only)
+4. Delete comments (comment authors only)
+
+## How It Works
+
+### Viewing Comments
+
+- All users can view comments on the blog post detail page.
+- Comments are displayed below the blog post content.
+
+### Adding a Comment
+
+- Authenticated users can add comments using the comment form at the bottom of the blog post detail page.
+- To add a comment, simply type your comment in the text area and click "Submit Comment".
+
+### Editing a Comment
+
+- Comment authors can edit their comments by clicking the "Edit" link next to their comment.
+- This will take you to a separate page where you can modify your comment.
+
+### Deleting a Comment
+
+- Comment authors can delete their comments by clicking the "Delete" link next to their comment.
+- A confirmation page will be shown before the comment is permanently deleted.
+
+## Permissions
+
+- Viewing comments: All users
+- Adding comments: Authenticated users only
+- Editing comments: Comment authors only
+- Deleting comments: Comment authors only
+
+## Testing the Comment System
+
+1. Start the Django development server: `python manage.py runserver`
+2. Open a web browser and navigate to a blog post detail page
+3. If not logged in, you should see existing comments but no option to add a comment
+4. Log in with an existing account or register a new one
+5. Add a new comment to the blog post
+6. Edit the comment you just created
+7. Delete the comment
+8. Log out and verify that you can still view comments but can't add, edit, or delete them
+
+## Security Measures
+
+- CSRF protection is enabled for all forms
+- `LoginRequiredMixin` ensures only authenticated users can access add, update, and delete views for comments
+- `UserPassesTestMixin` ensures only comment authors can edit or delete their own comments

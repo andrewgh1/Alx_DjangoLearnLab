@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultAdmin
-from .models import User,Profile,Post
+from .models import User,Profile,Post,Comment
 
 class UserAdmin(DefaultAdmin):
     list_display = ("username","email","first_name","last_name","is_staff")
@@ -10,5 +10,6 @@ class UserAdmin(DefaultAdmin):
 admin.site.register(User,UserAdmin)
 admin.site.register(Profile)
 admin.site.register(Post)
+admin.site.register(Comment)
 
 
