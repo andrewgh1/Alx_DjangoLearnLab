@@ -1,5 +1,6 @@
 from django import forms
 from .models import Profile, Post, Comment,Tag
+from taggit.forms import TagWidget()
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -11,6 +12,11 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
+
+    #widgets = {
+           # 'tags': TagWidget(), 
+       # } # TagWidget for tags field
+
 
     def clean_tags(self):
         tag_string = self.cleaned_data['tags']
