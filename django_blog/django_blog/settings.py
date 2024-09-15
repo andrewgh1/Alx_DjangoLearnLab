@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "blog",
+    # 3rd Party
+    'taggit',
 ]
 
 AUTH_USER_MODEL = "blog.User"

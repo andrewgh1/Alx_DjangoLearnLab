@@ -7,8 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
+from django.db.models import Q
 from django.contrib.auth.models import User
-from .models import  Post, Comment
+from .models import  Post, Comment, Profile, Tag
 from .forms import ProfileForm, CreatePostForm, UpdatePostForm, CommentForm
 
 class RegistrationForm(UserCreationForm):
@@ -51,17 +52,38 @@ def profile(request):
 class ListView(ListView):
     model = Post
     template_name = 'post_list.html'
+    context_object_name = 'posts'
+    ordering = ['-published_date']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return queryset
+    
 
 class DetailView(DetailView):
     model = Post
     template_name = 'post_view.html'
     context_object_name = 'post'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = CommentForm()
+        return context
+
+    
+
 class CreateView(LoginRequiredMixin, CreateView):
     model = Post
-    template_name = 'post_create.html'
-    form_class = CreatePostForm
-    success_url = '/list/'
+    form_class = ListView
+    template_name = 'post_form.html'
+    success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -70,7 +92,23 @@ class CreateView(LoginRequiredMixin, CreateView):
 
 class UpdateView(UpdateView):
     model = Post
-    template_name = 'post_edit.html'
+    form_class = ListView
+    template_name = 'post_form.html'
+    success_url = reverse_lazy('post_list')
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+def tag_posts(request, tag_name):
+    tag = get_object_or_404(Tag, name=tag_name)
+    posts = Post.objects.filter(tags=tag).order_by('-published_date')
+    return render(request, 'tag_posts.html', {'tag': tag, 'posts': posts})
+
 
 class DeleteView(UserPassesTestMixin, DeleteView):
     model = Post
@@ -86,7 +124,7 @@ class DeleteView(UserPassesTestMixin, DeleteView):
 #Comments authenticated users only
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'blog/post_detail.html'
+    template_name = 'post_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -106,7 +144,9 @@ def add_comment(request, pk):
             return redirect('post_detail', pk=post.pk)
     return redirect('post_detail', pk=post.pk)
 
-class CommentCreateView(LoginRequiredMixin, CreateView):
+
+#Comments for all users
+class CommentCreateView(CreateView):
     model = Comment
     form_class = CommentForm
     template_name = 'blog/comment_form.html'
@@ -114,10 +154,11 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
 
+
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
     form_class = CommentForm
-    template_name = 'blog/comment_form.html'
+    template_name = 'comment_form.html'
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
@@ -128,7 +169,8 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
-    template_name = 'blog/comment_confirm_delete.html'
+    form_class = CommentForm
+    template_name = 'comment_confirm_delete.html'
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
@@ -136,3 +178,10 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+    
+   
+    
+
+    
+    
+   
