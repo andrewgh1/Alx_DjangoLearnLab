@@ -103,6 +103,15 @@ class UpdateView(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+    
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'post_list.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        # Return all posts, no filtering by tags here
+        return Post.objects.all().order_by('-published_date')
 
 def tag_posts(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
