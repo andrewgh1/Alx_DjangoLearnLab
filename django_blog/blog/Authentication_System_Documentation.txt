@@ -1,0 +1,51 @@
+# Django Blog Authentication System
+
+This document outlines the authentication system implemented for the Django Blog project.
+
+## Features
+
+1. User Registration
+2. User Login
+3. User Logout
+4. Profile Management
+
+## How It Works
+
+### User Registration
+
+- Users can register by navigating to `/register/`
+- The registration form includes fields for username, email, and password
+- Upon successful registration, users are automatically logged in and redirected to their profile page
+
+### User Login
+
+- Registered users can log in at `/login/`
+- Django's built-in authentication views handle the login process
+- Successful login redirects users to their profile page
+
+### User Logout
+
+- Logged-in users can log out by visiting `/logout/`
+- After logout, users are redirected to the login page
+
+### Profile Management
+
+- Authenticated users can view and edit their profile at `/profile/`
+- Users can update their username and email address
+
+## Testing the Authentication System
+
+1. Start the Django development server: `python manage.py runserver`
+2. Open a web browser and navigate to `http://localhost:8000/register/`
+3. Create a new account using the registration form
+4. You should be automatically logged in and redirected to your profile page
+5. Try updating your profile information
+6. Log out and then log back in using your credentials
+7. Attempt to access the profile page (`/profile/`) without logging in - you should be redirected to the login page
+
+## Security Measures
+
+- CSRF protection is enabled for all forms
+- Passwords are securely hashed using Django's built-in hashing algorithms
+- Session cookies are set to secure and expire on browser close
+- HTTPS is recommended for production deployment (configure in your web server)
