@@ -1,4 +1,4 @@
-## Social Media API
+## Social Media API User Creation And Authentication
 
 This project is a Django-based Social Media API with user authentication functionality.
 
@@ -76,3 +76,98 @@ Authorization: Token <your-token-here>
 ## Testing
 
 Use tools like Postman or cURL to test the API endpoints. Ensure you're using the correct URL, method, and data format as specified in the API documentation.
+
+# Social Media Posts and Comments Functionality
+
+This project is a Django-based Social Media API with user authentication, posts, and comments functionality.
+
+## Setup
+
+(Previous setup instructions remain the same)
+
+## API Endpoints
+
+### User Registration and Login
+
+(Previous user registration and login endpoints remain the same)
+
+### Posts
+
+- List/Create Posts
+  - URL: `/api/posts/`
+  - Methods: GET, POST
+  - Authentication: Required for POST
+  - GET Response: List of posts (paginated)
+  - POST Data Params:
+    ```json
+    {
+      "title": "string",
+      "content": "string"
+    }
+    ```
+
+- Retrieve/Update/Delete Post
+  - URL: `/api/posts/{id}/`
+  - Methods: GET, PUT, PATCH, DELETE
+  - Authentication: Required for PUT, PATCH, DELETE (must be the author)
+  - PUT/PATCH Data Params:
+    ```json
+    {
+      "title": "string",
+      "content": "string"
+    }
+    ```
+
+### Comments
+
+- List/Create Comments
+  - URL: `/api/comments/`
+  - Methods: GET, POST
+  - Authentication: Required for POST
+  - GET Response: List of comments (paginated)
+  - POST Data Params:
+    ```json
+    {
+      "post": "int",
+      "content": "string"
+    }
+    ```
+
+- Retrieve/Update/Delete Comment
+  - URL: `/api/comments/{id}/`
+  - Methods: GET, PUT, PATCH, DELETE
+  - Authentication: Required for PUT, PATCH, DELETE (must be the author)
+  - PUT/PATCH Data Params:
+    ```json
+    {
+      "content": "string"
+    }
+    ```
+
+## Pagination
+
+All list endpoints are paginated. Use `?page=<page_number>` to navigate through pages.
+
+## Filtering Posts
+
+You can search posts by title or content using the `search` query parameter:
+
+```
+GET /api/posts/?search=<search_term>
+```
+
+## Authentication
+
+This API uses Token Authentication. Include the token in the Authorization header for protected routes:
+```
+Authorization: Token <your-token-here>
+```
+
+## Testing
+
+Run the tests using:
+```
+python manage.py test
+```
+
+For manual testing, use tools like Postman or cURL to interact with the API endpoints.
